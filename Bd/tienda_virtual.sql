@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 17, 2024 at 03:48 PM
+-- Generation Time: Feb 26, 2024 at 05:09 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -43,7 +43,7 @@ CREATE TABLE `clientes` (
   `id` int(11) NOT NULL,
   `nombre` varchar(150) NOT NULL,
   `direccion` varchar(150) NOT NULL,
-  `correo_electronico` varchar(150) NOT NULL,
+  `correoElectronico` varchar(150) NOT NULL,
   `telefono` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
@@ -55,10 +55,9 @@ CREATE TABLE `clientes` (
 
 CREATE TABLE `detalles_de_pedido` (
   `id` int(11) NOT NULL,
-  `id_pedido` int(11) NOT NULL,
-  `id_producto` int(11) NOT NULL,
-  `cantidad` int(11) NOT NULL,
-  `precio_unitario` decimal(10,0) NOT NULL
+  `idPedido` int(11) NOT NULL,
+  `idProducto` int(11) NOT NULL,
+  `cantidad` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
@@ -69,9 +68,9 @@ CREATE TABLE `detalles_de_pedido` (
 
 CREATE TABLE `pedidos` (
   `id` int(11) NOT NULL,
-  `id_cliente` int(11) NOT NULL,
-  `fecha_pedido` datetime NOT NULL,
-  `estado_pedido` varchar(150) NOT NULL
+  `idCliente` int(11) NOT NULL,
+  `fechaPedido` datetime NOT NULL,
+  `estadoPedido` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
@@ -85,7 +84,7 @@ CREATE TABLE `productos` (
   `nombre` varchar(150) NOT NULL,
   `descripcion` text NOT NULL,
   `precio` decimal(10,0) NOT NULL,
-  `id_categoria` int(11) NOT NULL,
+  `idCategoria` int(11) NOT NULL,
   `stock` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
@@ -110,22 +109,22 @@ ALTER TABLE `clientes`
 --
 ALTER TABLE `detalles_de_pedido`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_producto` (`id_producto`),
-  ADD KEY `id_pedido` (`id_pedido`);
+  ADD KEY `id_producto` (`idProducto`),
+  ADD KEY `id_pedido` (`idPedido`);
 
 --
 -- Indexes for table `pedidos`
 --
 ALTER TABLE `pedidos`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_cliente` (`id_cliente`);
+  ADD KEY `id_cliente` (`idCliente`);
 
 --
 -- Indexes for table `productos`
 --
 ALTER TABLE `productos`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_categoria` (`id_categoria`);
+  ADD KEY `id_categoria` (`idCategoria`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -169,15 +168,15 @@ ALTER TABLE `productos`
 -- Constraints for table `pedidos`
 --
 ALTER TABLE `pedidos`
-  ADD CONSTRAINT `pedidos_ibfk_1` FOREIGN KEY (`id_cliente`) REFERENCES `clientes` (`id`),
-  ADD CONSTRAINT `pedidos_ibfk_2` FOREIGN KEY (`id`) REFERENCES `detalles_de_pedido` (`id_pedido`);
+  ADD CONSTRAINT `pedidos_ibfk_1` FOREIGN KEY (`idCliente`) REFERENCES `clientes` (`id`),
+  ADD CONSTRAINT `pedidos_ibfk_2` FOREIGN KEY (`id`) REFERENCES `detalles_de_pedido` (`idPedido`);
 
 --
 -- Constraints for table `productos`
 --
 ALTER TABLE `productos`
-  ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`id_categoria`) REFERENCES `categorias` (`id`),
-  ADD CONSTRAINT `productos_ibfk_2` FOREIGN KEY (`id`) REFERENCES `detalles_de_pedido` (`id_producto`);
+  ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`idCategoria`) REFERENCES `categorias` (`id`),
+  ADD CONSTRAINT `productos_ibfk_2` FOREIGN KEY (`id`) REFERENCES `detalles_de_pedido` (`idProducto`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
