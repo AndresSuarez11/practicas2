@@ -20,7 +20,10 @@
 </head>
 
   <!-- Navigation -->
-  <div th:insert="~{administrador/administrador_template.html::header}" ></div>
+  <div th:insert="~{cliente/cliente_template.html::header}" th:if="${sesion==null}" ></div>
+
+
+  <div th:insert="~{cliente/cliente_template.html::header-cliente}" th:unless="${sesion==null}" ></div>
 
     <!-- Page Content -->
     <div class="container">
@@ -41,7 +44,7 @@
               <p class="card-text" th:text="${producto.nombre}"></p>
             </div>
             <div class="card-footer">
-              <a href="productohome.html" class="btn btn-success">Ver producto</a>
+              <a th:href="@{/homeproducto/{id} (id=${producto.id})}" class="btn btn-success">Ver producto</a>
             </div>
           </div>
         </div>
@@ -53,7 +56,7 @@
     </div>
     <!-- /.container -->
 
-    <div th:insert="~{administrador/administrador_template.html::footer}"></div>
+    <div th:insert="~{cliente/cliente_template.html::footer}" ></div>
 
     <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
     <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
