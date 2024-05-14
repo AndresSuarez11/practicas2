@@ -23,7 +23,10 @@
 
 <body>
 
-<div th:insert="~{cliente/cliente_template.html::header}" ></div>
+    <div th:insert="~{cliente/cliente_template.html::header}" th:if="${sesion==null}" ></div>
+
+
+    <div th:insert="~{cliente/cliente_template.html::header-cliente}" th:unless="${sesion==null}" ></div>
 
 
 <!-- Page Content -->
@@ -79,3 +82,6 @@
 </div>
 
 <div th:insert="~{cliente/cliente_template.html::footer}" ></div>
+
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>

@@ -2,8 +2,6 @@ package com.example.shop.controller;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,14 +13,14 @@ import com.example.shop.model.Pedido;
 import com.example.shop.model.Producto;
 import com.example.shop.service.IClienteService;
 import com.example.shop.service.IPedidoService;
-import com.example.shop.service.ProductoService;
+import com.example.shop.service.IProductoService;
 
 @Controller
 @RequestMapping("/administrador")
 public class AdministradorController {
 
 	@Autowired
-	private ProductoService productoService;
+	private IProductoService productoService;
 	
 	@Autowired
 	private IClienteService clienteService;
@@ -30,7 +28,6 @@ public class AdministradorController {
 	@Autowired
 	private IPedidoService pedidoService;
 	
-	private Logger logger = LoggerFactory.getLogger(AdministradorController.class);
 	
 	@GetMapping("")
 	public String home(Model model) {
@@ -58,7 +55,6 @@ public class AdministradorController {
 	@GetMapping("/detalle/{id}")
 	public String detalle(Model model, @PathVariable Integer id) {
 		
-		logger.info("id de la orden: {} ", id);
 		Pedido pedido=pedidoService.findById(id).get();
 		
 		model.addAttribute("detalles", pedido.getDetalle());

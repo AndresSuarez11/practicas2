@@ -1,10 +1,10 @@
 package com.example.shop.controller;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.shop.model.Categoria;
 import com.example.shop.model.Cliente;
 import com.example.shop.model.Producto;
+import com.example.shop.service.ICategoriaService;
 import com.example.shop.service.IClienteService;
-import com.example.shop.service.ProductoService;
+import com.example.shop.service.IProductoService;
 import com.example.shop.service.UploadFileService;
 
 import jakarta.servlet.http.HttpSession;
@@ -27,14 +29,16 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/productos")
 public class ProductoController {
-
-	private final Logger LOGGER = LoggerFactory.getLogger(ProductoController.class);	
+	
 	
 	@Autowired
-	private ProductoService productoService;
+	private IProductoService productoService;
 	
 	@Autowired
 	private IClienteService clienteService;
+	
+	@Autowired
+	private ICategoriaService categoriaService;
 	
 	@Autowired
 	private UploadFileService upload;
@@ -47,15 +51,19 @@ public class ProductoController {
 	}
 	
 	@GetMapping("/create")
-	public String create() {
+	public String create(Model model) {
+	    List<Categoria> categorias = categoriaService.findAll();
+	    model.addAttribute("categorias", categorias);
 		return "productos/create";
 	}
 	
 	@PostMapping("/save")
-	public String save(Producto producto, @RequestParam("img") MultipartFile file, HttpSession session) throws IOException {
-		LOGGER.info("Este es el objeto producto {}", producto);
+	public String save(Producto producto, @RequestParam("img") MultipartFile file, HttpSession session, @RequestParam("categoria") Integer categoriaId) throws IOException {
 		Cliente C = clienteService.findById(Integer.parseInt(session.getAttribute("idcliente").toString())).get();
 		producto.setCliente(C);
+		
+		Categoria categoria = categoriaService.findById(categoriaId).orElseThrow();
+		producto.setCategoria(categoria);
 		
 		//imagen
 		if(producto.getId()==null) { //Cuando se crea un producto
@@ -73,8 +81,9 @@ public class ProductoController {
 		Producto producto = new Producto();
 		Optional<Producto> optionalProducto=productoService.get(id);
 		producto=optionalProducto.get();
-		LOGGER.info("Producto buscado: {}", producto);
+		List<Categoria> categorias=categoriaService.findAll();
 		model.addAttribute("producto", producto);
+		model.addAttribute("categorias", categorias);
 		return "productos/edit";
 	}
 	
@@ -84,18 +93,15 @@ public class ProductoController {
 		Producto p = new Producto();
 		p=productoService.get(producto.getId()).get();
 		
-		
-		if(file.isEmpty()) { //Cuando editamos el producto pero no cambiamos la imagen
-
+if (file.isEmpty()) { // editamos el producto pero no cambiamos la imagem
+			
 			producto.setImagen(p.getImagen());
-		} else {
-			//Eliminar cuando la imagen no sea por defecto
-			if(p.getImagen().equals("default.jpg")) {
+		}else {// cuando se edita tbn la imagen			
+			//eliminar cuando no sea la imagen por defecto
+			if (!p.getImagen().equals("default.jpg")) {
 				upload.deleteImage(p.getImagen());
 			}
-			
-			
-			String nombreImagen = upload.saveImage(file);
+			String nombreImagen= upload.saveImage(file);
 			producto.setImagen(nombreImagen);
 		}
 		producto.setCliente(p.getCliente());
@@ -110,12 +116,16 @@ public class ProductoController {
 		Producto p = new Producto();
 		p=productoService.get(id).get();
 	
-		//Eliminar cuando la imagen no sea por defecto
-		if(p.getImagen().equals("default.jpg")) {
-			upload.deleteImage(p.getImagen());
-		}
+		//eliminar cuando no sea la imagen por defecto
+				if (!p.getImagen().equals("default.jpg")) {
+					upload.deleteImage(p.getImagen());
+				}
+				
+				
 		productoService.delete(id);
 		return "redirect:/productos";
 	}
+	
+
 	
 }

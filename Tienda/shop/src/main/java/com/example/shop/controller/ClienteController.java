@@ -3,8 +3,6 @@ package com.example.shop.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +22,7 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/cliente")
 public class ClienteController {
 	
-	private final Logger logger = LoggerFactory.getLogger(ClienteController.class);
+
 	
 	@Autowired
 	private IClienteService clienteService;
@@ -40,7 +38,6 @@ public class ClienteController {
 	
 	@PostMapping("/save")
 	public String save(Cliente cliente) {
-		logger.info("Usuario registro: {}", cliente);
 		
 		cliente.setTipo("USER");
 		clienteService.save(cliente);
@@ -55,10 +52,8 @@ public class ClienteController {
 	
 	@PostMapping("/acceder")
 	public String acceder(Cliente cliente, HttpSession session) {
-		logger.info("Acceso: {}", cliente);
 		
 		Optional<Cliente> user=clienteService.findBycorreoElectronico(cliente.getCorreoElectronico());
-		//logger.info("Usuario de db: {}", user.get());
 		
 		if(user.isPresent()) {
 			session.setAttribute("idcliente", user.get().getId());
@@ -67,9 +62,7 @@ public class ClienteController {
 			} else {
 				return "redirect:/";
 			}
-		} else {
-			logger.info("cliente no existe");
-		}
+		} 
 		
 		return "redirect:/";
 	}
@@ -87,7 +80,6 @@ public class ClienteController {
 
 	@GetMapping("/detalle/{id}")
 	public String detalleCompra(@PathVariable Integer id, HttpSession session, Model model) {
-		logger.info("id de la orden: {}", id);
 		
 		Optional<Pedido> pedido = pedidoService.findById(id);
 		
