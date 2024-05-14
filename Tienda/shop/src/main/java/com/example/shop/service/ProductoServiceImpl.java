@@ -11,7 +11,7 @@ import com.example.shop.repository.IProductoRepository;
 
 
 @Service
-public class ProductoServiceImpl implements ProductoService{
+public class ProductoServiceImpl implements IProductoService{
 
 	@Autowired
 	private IProductoRepository productoRepository;
@@ -43,6 +43,12 @@ public class ProductoServiceImpl implements ProductoService{
 	@Override
 	public List<Producto> findAll() {
 		return productoRepository.findAll();
+	}
+
+	@Override
+	public List<Producto> findByCategoriaId(Integer idCategoria) {
+		// TODO Auto-generated method stub
+		return productoRepository.findByCategoriaId(idCategoria);
 	}
 	
 

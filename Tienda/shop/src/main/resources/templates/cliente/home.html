@@ -25,36 +25,37 @@
 
   <div th:insert="~{cliente/cliente_template.html::header-cliente}" th:unless="${sesion==null}" ></div>
 
-    <!-- Page Content -->
-    <div class="container">
-
-      <!-- Jumbotron Header -->
-      <header class="jumbotron my-4">
-        <h1 class="display-3">Bienvenido a Kart Shop</h1>
-        <p class="lead">Tu tienda de productos en Línea</p>
-      </header>
-
-      <!-- Page Features -->
-      <div class="row text-center">
-
-        <div class="col-lg-3 col-md-6 mb-4" th:each="producto: ${productos}">
-          <div class="card h-100">
-            <img class="card-img-top" th:src="@{/images/{img} (img=${producto.imagen})}" alt="">
-            <div class="card-body">
-              <p class="card-text" th:text="${producto.nombre}"></p>
-            </div>
-            <div class="card-footer">
-              <a th:href="@{/homeproducto/{id} (id=${producto.id})}" class="btn btn-success">Ver producto</a>
-            </div>
-          </div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">
+            <h2>Categorías</h2>
+            <form th:action="@{/filtrar}" method="get">
+                <div th:each="categoria : ${categorias}">
+                    <input type="radio" th:id="${'categoria-' + categoria.id}" th:name="categoria" th:value="${categoria.id}">
+                    <label th:for="${'categoria-' + categoria.id}" th:text="${categoria.nombre}"></label>
+                    <br>
+                </div>
+                <button type="submit" class="btn btn-primary">Filtrar</button>
+            </form>
         </div>
-
-       
-      </div>
-      <!-- /.row -->
-
+        <!-- Lista de productos -->
+        <div class="col-lg-9">
+            <div class="row text-center">
+                <div class="col-lg-3 col-md-6 mb-4" th:each="producto: ${productos}">
+                    <div class="card h-100">
+                        <img class="card-img-top" th:src="@{/images/{img} (img=${producto.imagen})}" alt="">
+                        <div class="card-body">
+                            <p class="card-text" th:text="${producto.nombre}"></p>
+                        </div>
+                        <div class="card-footer">
+                            <a th:href="@{/homeproducto/{id} (id=${producto.id})}" class="btn btn-success">Ver producto</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- /.container -->
+</div>
 
     <div th:insert="~{cliente/cliente_template.html::footer}" ></div>
 
