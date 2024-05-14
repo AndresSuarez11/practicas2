@@ -1,5 +1,7 @@
 package com.example.shop.model;
 
+
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,9 +25,17 @@ public class Producto {
 	
 	@ManyToOne
 	private Cliente cliente;
+	
+	@ManyToOne
+	private Categoria categoria;
 
-	public Producto(Integer id, String nombre, String descripcion, String imagen, double precio, Integer idCategoria,
-			int cantidad, Cliente cliente) {
+	public Producto() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public Producto(Integer id, String nombre, String descripcion, String imagen, double precio, int cantidad,
+			Cliente cliente, Categoria categoria) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -34,18 +44,14 @@ public class Producto {
 		this.precio = precio;
 		this.cantidad = cantidad;
 		this.cliente = cliente;
+		this.categoria = categoria;
 	}
-
-	public Producto() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
 
 	@Override
 	public String toString() {
 		return "Producto [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", imagen=" + imagen
-				+ ", precio=" + precio + ", cantidad=" + cantidad + ", cliente=" + cliente + "]";
+				+ ", precio=" + precio + ", cantidad=" + cantidad + ", cliente=" + cliente + ", categoria="
+				+ categoria + "]";
 	}
 
 	public Integer getId() {
@@ -88,7 +94,6 @@ public class Producto {
 		this.precio = precio;
 	}
 
-
 	public int getCantidad() {
 		return cantidad;
 	}
@@ -105,6 +110,15 @@ public class Producto {
 		this.cliente = cliente;
 	}
 
-	
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
+
+
 	
 }
